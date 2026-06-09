@@ -58,7 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware' 
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    "django.middleware.locale.LocaleMiddleware"
 ]
 
 ROOT_URLCONF = 'task_manager.urls'
@@ -130,3 +131,26 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+USE_I18N = True
+
+LANGUAGE_CODE = "en-us"   # язык по умолчанию — английский
+
+LANGUAGES = [
+    ("en", "English"),
+    ("ru", "Russian"),
+]
+
+# где Django будет искать файлы переводов
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
