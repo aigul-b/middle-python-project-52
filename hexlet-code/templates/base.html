@@ -37,6 +37,12 @@
         </div>
     </nav>
 
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
     <main class="container flex-grow-1 my-4">
         {% block content %}{% endblock %}
     </main>

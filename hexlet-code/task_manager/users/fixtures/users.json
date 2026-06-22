@@ -1,0 +1,22 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "test_user",
+      "first_name": "test",
+      "last_name": "user",
+      "password": "pbkdf2_sha25pwdholder."
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "username": "second_user",
+      "first_name": "second",
+      "last_name": "user",
+      "password": "pbkdf2_sha256$placeholder"
+    }
+  }
+]
