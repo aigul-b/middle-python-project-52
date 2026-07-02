@@ -1,0 +1,26 @@
+<!-- users/index.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<table>
+  <thead>
+    <tr><th>ID</th><th>Имя пользователя</th>
+        <th>Полное имя</th><th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.first_name }} {{ user.last_name }}</td>
+        <td>
+          <a href="{% url 'user_update' user.id %}">Изменить|</a>
+          <a href="{% url 'user_delete' user.id %}">Удалить</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
