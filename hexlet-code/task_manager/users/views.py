@@ -29,8 +29,11 @@ class UserCreateView(SuccessMessageMixin, CreateView):
 class UserPermissionMixin(LoginRequiredMixin):
     """Разрешаем менять/удалять только самого себя."""
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.user.pk != kwargs['pk']:
-            messages.error(request, 'У вас нет прав для изменения другого пользователя.')
+        if not request.user.is_authenticated:
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            return redirect('login')
+        if request.user.pk != self.get_object().pk:
+            messages.error(request, 'У вас нет прав для изменения.')
             return redirect('users')
         return super().dispatch(request, *args, **kwargs)
 

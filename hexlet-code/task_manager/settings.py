@@ -15,6 +15,7 @@ import os
 
 import dj_database_url
 from dotenv import load_dotenv
+from django.contrib.messages import constants as messages
 
 load_dotenv()  # подхватывает .env в окружение
 
@@ -48,18 +49,21 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_bootstrap5',
-    'task_manager'
+    'task_manager',
+    'task_manager.users',
+    'statuses',
+    'tasks'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.middleware.locale.LocaleMiddleware"
 ]
 
@@ -131,8 +135,6 @@ LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
-
 USE_TZ = True
 
 
@@ -153,8 +155,6 @@ STORAGES = {
 
 USE_I18N = True
 
-LANGUAGE_CODE = "en-us"   # язык по умолчанию — английский
-
 LANGUAGES = [
     ("en", "English"),
     ("ru", "Russian"),
@@ -164,3 +164,11 @@ LANGUAGES = [
 LOCALE_PATHS = [
     BASE_DIR / "locale",
 ]
+# Редиректы аутентификации
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'      # после входа — на главную
+LOGOUT_REDIRECT_URL = 'home'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}

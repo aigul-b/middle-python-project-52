@@ -31,7 +31,10 @@ class UserCRUDTest(TestCase):
         response = self.client.post(
             reverse('user_update', kwargs={'pk': user.pk}), data
         )
+        if response.status_code == 200:
+            self.fail(f"Форма не прошла. Ошибки: {response.context['form'].errors.as_json()}")
         self.assertRedirects(response, reverse('users'))
+        
         user.refresh_from_db()
         self.assertEqual(user.first_name, 'Updated')
 
@@ -47,6 +50,7 @@ class UserCRUDTest(TestCase):
     def test_update_other_user_forbidden(self):
         users = User.objects.all()
         user1, user2 = users[0], users[1]
+        self.client.force_login(user1)  
         response = self.client.post(
             reverse('user_update', kwargs={'pk': user2.pk}),
             {'first_name': 'Hacked', 'last_name': user2.last_name,
