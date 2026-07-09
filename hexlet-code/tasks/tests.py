@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 
 from statuses.models import Status
 from tasks.models import Task
+from labels.models import Label
 
 User = get_user_model()
 
@@ -114,4 +115,75 @@ class TaskCRUDTest(TestCase):
     def test_delete_requires_login(self):
         self.client.logout()
         response = self.client.get(reverse_lazy('tasks:delete', args=[self.task.pk]))
+        self.assertEqual(response.status_code, 302)
+
+
+
+class TaskFilterTest(TestCase):
+    def setUp(self):
+        self.author = User.objects.create_user(username='author', password='testpass123')
+        self.other_user = User.objects.create_user(username='other', password='testpass123')
+        self.client.force_login(self.author)
+
+        self.status1 = Status.objects.create(name='В работе')
+        self.status2 = Status.objects.create(name='Готово')
+
+        self.label1 = Label.objects.create(name='Баг')
+        self.label2 = Label.objects.create(name='Фича')
+
+        self.task1 = Task.objects.create(
+            name='Задача автора',
+            description='Описание',
+            status=self.status1,
+            author=self.author,
+            executor=self.author,
+        )
+        self.task1.labels.add(self.label1)
+
+        self.task2 = Task.objects.create(
+            name='Задача другого пользователя',
+            description='Описание',
+            status=self.status2,
+            author=self.other_user,
+            executor=self.other_user,
+        )
+        self.task2.labels.add(self.label2)
+
+    def test_filter_by_status(self):
+        response = self.client.get(reverse_lazy('tasks:list'), {'status': self.status1.pk})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Задача автора')
+        self.assertNotContains(response, 'Задача другого пользователя')
+
+    def test_filter_by_executor(self):
+        response = self.client.get(reverse_lazy('tasks:list'), {'executor': self.other_user.pk})
+        self.assertContains(response, 'Задача другого пользователя')
+        self.assertNotContains(response, 'Задача автора')
+
+    def test_filter_by_label(self):
+        response = self.client.get(reverse_lazy('tasks:list'), {'labels': self.label1.pk})
+        self.assertContains(response, 'Задача автора')
+        self.assertNotContains(response, 'Задача другого пользователя')
+
+    def test_filter_own_tasks(self):
+        response = self.client.get(reverse_lazy('tasks:list'), {'own_tasks': 'on'})
+        self.assertContains(response, 'Задача автора')
+        self.assertNotContains(response, 'Задача другого пользователя')
+
+    def test_no_filter_returns_all_tasks(self):
+        response = self.client.get(reverse_lazy('tasks:list'))
+        self.assertContains(response, 'Задача автора')
+        self.assertContains(response, 'Задача другого пользователя')
+
+    def test_combined_filters(self):
+        response = self.client.get(
+            reverse_lazy('tasks:list'),
+            {'status': self.status1.pk, 'labels': self.label1.pk},
+        )
+        self.assertContains(response, 'Задача автора')
+        self.assertNotContains(response, 'Задача другого пользователя')
+
+    def test_filter_requires_login(self):
+        self.client.logout()
+        response = self.client.get(reverse_lazy('tasks:list'), {'status': self.status1.pk})
         self.assertEqual(response.status_code, 302)
