@@ -1,22 +1,38 @@
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-09 09:58+0000\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: templates/base.html:9 templates/base.html:16
 msgid "Task Manager"
 msgstr "Менеджер задач"
 
+#: templates/base.html:26
 msgid "Users"
 msgstr "Пользователи"
 
-msgid "Login"
-msgstr "Вход"
-
-msgid "Registration"
-msgstr "Регистрация"
-
+#: templates/base.html:29
 msgid "Statuses"
 msgstr "Статусы"
 
+#: templates/base.html:32
 msgid "Tasks"
 msgstr "Задачи"
+
+#: templates/base.html:35
+msgid "Labels"
+msgstr ""
+
+#: templates/base.html:43
+msgid "Logout"
+msgstr ""
+
+#: templates/base.html:48
+msgid "Login"
+msgstr "Вход"
+
+#: templates/base.html:51
+msgid "Registration"
+msgstr "Регистрация"

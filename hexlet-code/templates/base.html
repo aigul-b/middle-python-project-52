@@ -31,6 +31,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'tasks:list' %}">{% translate "Tasks" %}</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'labels:list' %}">{% translate "Labels" %}</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
