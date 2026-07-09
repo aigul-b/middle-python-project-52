@@ -29,3 +29,4 @@ urlpatterns = [
     path('tasks/', include('tasks.urls')),
     path('labels/', include('labels.urls')),
 ]
+
