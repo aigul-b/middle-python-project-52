@@ -15,6 +15,7 @@ import os
 import dj_database_url
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
+import dj_database_url
 
 load_dotenv()  # подхватывает .env в окружение
 
@@ -68,7 +69,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django.middleware.locale.LocaleMiddleware",
-
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware'
 ]
 
@@ -96,13 +96,13 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-#         conn_max_age=600,
-#         conn_health_checks=True,
-#     )
-# }
+DATABASES = {
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+}
 if os.getenv('DATABASE_URL'):
     # продакшен: postgres (например, через dj-database-url)
     DATABASES = {'default': dj_database_url.config()}

@@ -52,6 +52,13 @@ class UserDeleteView(UserPermissionMixin, SuccessMessageMixin, DeleteView):
     success_url = reverse_lazy('users')
     success_message = 'Пользователь успешно удален'
 
+    def post(self, request, *args, **kwargs):
+        user = self.get_object()
+        if user.author_tasks.exists() or user.executor_tasks.exists():
+            messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
+            return redirect('users')
+        return super().post(request, *args, **kwargs)
+
 
 class UserLoginView(SuccessMessageMixin, LoginView):
     template_name = 'users/login.html'

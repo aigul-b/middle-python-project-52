@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+from tasks.models import Task
+from statuses.models import Status
 
 
 class UserCRUDTest(TestCase):
@@ -60,3 +62,18 @@ class UserCRUDTest(TestCase):
         self.assertRedirects(response, reverse('users'))
         user2.refresh_from_db()
         self.assertNotEqual(user2.first_name, 'Hacked')   # не изменился
+
+    def test_delete_user_with_tasks_blocked(self):
+        user = User.objects.first()
+        status = Status.objects.create(name='В работе')
+        Task.objects.create(
+            name='Задача',
+            status=status,
+            author=user,
+        )
+        self.client.force_login(user)
+        response = self.client.post(
+            reverse('user_delete', kwargs={'pk': user.pk}), follow=True
+        )
+        self.assertTrue(User.objects.filter(pk=user.pk).exists())
+        self.assertContains(response, 'Невозможно удалить пользователя')
