@@ -14,3 +14,9 @@ msgstr "Вход"
 
 msgid "Registration"
 msgstr "Регистрация"
+
+msgid "Statuses"
+msgstr "Статусы"
+
+msgid "Tasks"
+msgstr "Задачи"
