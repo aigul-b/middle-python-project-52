@@ -1,10 +1,10 @@
 <!-- users/create.html -->
 {% extends 'base.html' %}
-
+{% load django_bootstrap5 %}
 {% block content %}
 <form method="post">
   {% csrf_token %}
-  {{ form.as_p }}
+  {% bootstrap_form form %}
   <button type="submit">Зарегистрировать</button>
 </form>
 {% endblock %}
