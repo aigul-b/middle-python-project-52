@@ -16,6 +16,7 @@ import dj_database_url
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
 import dj_database_url
+import rollbar
 
 load_dotenv()  # подхватывает .env в окружение
 
@@ -103,16 +104,17 @@ DATABASES = {
         conn_health_checks=True,
     )
 }
-if os.getenv('DATABASE_URL'):
-    # продакшен: postgres (например, через dj-database-url)
-    DATABASES = {'default': dj_database_url.config()}
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+
+# if os.getenv('DATABASE_URL'):
+#     # продакшен: postgres (например, через dj-database-url)
+#     DATABASES = {'default': dj_database_url.config()}
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -186,3 +188,7 @@ ROLLBAR = {
     'code_version': os.getenv('GIT_SHA', '1.0.0'),
     'root': BASE_DIR,
 }
+
+
+if not rollbar.SETTINGS:
+    rollbar.init(**ROLLBAR)
