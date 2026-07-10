@@ -7,7 +7,7 @@ class UserModelChoiceField(ModelChoiceField):
         return f'{user.first_name} {user.last_name}'.strip() or user.username
 
 class TaskForm(ModelForm):
-    executor = ModelChoiceField(
+    executor = UserModelChoiceField(
         queryset=User.objects.all(),
         label='Исполнитель',
     )
