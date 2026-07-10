@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import ModelForm, ModelChoiceField
 from tasks.models import Task
 from django.contrib.auth.models import User
@@ -14,6 +15,9 @@ class TaskForm(ModelForm):
     class Meta:
         model = Task
         fields = ['name', 'description', 'status', 'executor', 'labels']
+        widgets = {
+            'labels': forms.CheckboxSelectMultiple(),
+        }
         labels = {
             'name': 'Имя',
             'description':'Описание',
