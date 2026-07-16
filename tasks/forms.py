@@ -11,6 +11,7 @@ class TaskForm(ModelForm):
     executor = UserModelChoiceField(
         queryset=User.objects.all(),
         label='Исполнитель',
+        required=False,
     )
     class Meta:
         model = Task
